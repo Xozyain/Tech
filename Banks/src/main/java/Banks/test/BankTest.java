@@ -8,8 +8,6 @@ package Banks.test;//package banks.test;
 //
 //public class BankTest
 //{
-////C# TO JAVA CONVERTER TASK: Java annotations will not correspond to .NET attributes:
-////ORIGINAL LINE: [Fact] public void RegisterBank_CentralBankHasBank()
 //	public final void RegisterBank_CentralBankHasBank()
 //	{
 //		var creditConfig = new CreditConfig(new Money(500), new Money(10));
