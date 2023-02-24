@@ -4,79 +4,84 @@ import Banks.Models.AccountType;
 import Banks.Models.Bank;
 import Banks.Models.Client;
 import Banks.Models.Money;
-import Banks.console.chain.IChainLink;
+import Banks.console.chain.ChainLink;
 
 import java.util.Scanner;
 
-public class BankAccountController implements IChainLink
-{
-	private Bank bank;
-	private IChainLink nextChainLink;
-	public BankAccountController(Bank bank)
-	{
-		this.bank = bank;
-		setNextChainLink(null);
-	}
+/**
+ * The type Bank account controller.
+ */
+public class BankAccountController implements ChainLink {
+    private Bank bank;
+    private ChainLink nextChainLink;
+
+    /**
+     * Instantiates a new Bank account controller.
+     *
+     * @param bank the bank
+     */
+    public BankAccountController(Bank bank) {
+        this.bank = bank;
+        setNextChainLink(null);
+    }
 
 
-	public final Bank getBank()
-	{
-		return bank;
-	}
-	public final IChainLink getNextChainLink()
-	{
-		return nextChainLink;
-	}
-	public final void setNextChainLink(IChainLink value)
-	{
-		nextChainLink = value;
-	}
+    /**
+     * Gets bank.
+     *
+     * @return the bank
+     */
+    public Bank getBank() {
+        return bank;
+    }
 
-	public final void Handle() {
-		var chooseClientHandler = new ChooseClientController(getBank());
-		chooseClientHandler.Handle();
-		Client client = null;
-		try{
-			if (chooseClientHandler.getClient() != null) client = chooseClientHandler.getClient();
-			else throw new Exception("Client is null");
-		}
-		catch(Exception ex){
-			System.out.println(ex.getMessage());
-		}
+    public ChainLink getNextChainLink() {
+        return nextChainLink;
+    }
 
-		System.out.println("Requests: debit, credit, deposit");
-		String command = new Scanner(System.in).nextLine();
+    public void setNextChainLink(ChainLink value) {
+        nextChainLink = value;
+    }
 
-		switch (command)
-		{
-			case "deposit":
-			{
-				var balanceHandler = new BalanceController();
-				balanceHandler.Handle();
-				Money balance;
+    public void handle() {
+        var chooseClientHandler = new ChooseClientController(getBank());
+        chooseClientHandler.handle();
+        Client client = null;
+        try {
+            if (chooseClientHandler.getClient() != null) client = chooseClientHandler.getClient();
+            else throw new Exception("Client is null");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
 
-				try{
-					if (balanceHandler.getAmount() != null) balance = balanceHandler.getAmount();
-					else throw new Exception("Balance is null");
-					getBank().CreateBankAccount(client, AccountType.Deposit, balance);
-				}
-				catch(Exception ex){
-					System.out.println(ex.getMessage());
-				}
-				break;
-			}
+        System.out.println("Requests: debit, credit, deposit");
+        String command = new Scanner(System.in).nextLine();
 
-			case "debit":
-			{
-				getBank().CreateBankAccount(client, AccountType.Debit);
-				break;
-			}
+        switch (command) {
+            case "deposit": {
+                var balanceHandler = new BalanceController();
+                balanceHandler.handle();
+                Money balance;
 
-			case "credit":
-			{
-				getBank().CreateBankAccount(client, AccountType.Credit);
-				break;
-			}
-		}
-	}
+                try {
+                    if (balanceHandler.getAmount() != null) balance = balanceHandler.getAmount();
+                    else throw new Exception("Balance is null");
+                    getBank().CreateBankAccount(client, AccountType.Deposit, balance);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                break;
+            }
+
+            case "debit": {
+                getBank().CreateBankAccount(client, AccountType.Debit);
+                break;
+            }
+
+            case "credit": {
+                getBank().CreateBankAccount(client, AccountType.Credit);
+                break;
+            }
+        }
+    }
 }

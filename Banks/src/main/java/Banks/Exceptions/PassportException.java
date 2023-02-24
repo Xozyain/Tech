@@ -1,14 +1,19 @@
 package Banks.Exceptions;
 
-public class PassportException extends BaseException
-{
-	private PassportException(String message)
-	{
-		super(message);
-	}
+/**
+ * The type Passport exception.
+ */
+public class PassportException extends BaseException {
+    private PassportException(String message) {
+        super(message);
+    }
 
-	public static PassportException WrongPassportFormat()
-	{
-		return new PassportException("Wrong passport format");
-	}
+    /**
+     * Wrong passport format passport exception.
+     *
+     * @return the passport exception
+     */
+    public static PassportException WrongPassportFormat() {
+        return new PassportException("Wrong passport format");
+    }
 }

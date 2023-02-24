@@ -1,6 +1,6 @@
 package Banks.console.chain;
 
-import Banks.Entities.IBankAccount;
+import Banks.Entities.BankAccount;
 import Banks.Models.Bank;
 import Banks.Models.Money;
 import Banks.console.tools.bankhandler.BalanceController;
@@ -11,114 +11,113 @@ import Banks.console.tools.clienthandlers.ClientController;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class MainController implements IChainLink
-{
-	private Bank bank;
-	private IChainLink nextChainLink;
-	public MainController(Bank bank)
-	{
-		this.bank = bank;
-	}
+/**
+ * The type Main controller.
+ */
+public class MainController implements ChainLink {
+    private Bank bank;
+    private ChainLink nextChainLink;
 
-	public final Bank getBank()
-	{
-		return bank;
-	}
-	public final IChainLink getNextChainLink()
-	{
-		return nextChainLink;
-	}
-	public final void setNextChainLink(IChainLink value)
-	{
-		nextChainLink = value;
-	}
+    /**
+     * Instantiates a new Main controller.
+     *
+     * @param bank the bank
+     */
+    public MainController(Bank bank) {
+        this.bank = bank;
+    }
 
-	public final void Handle()
-	{
-		System.out.println("Requests: client, addBankAccount, makeTransaction");
-		String command = new Scanner(System.in).nextLine();
-		switch (command)
-		{
-			case "client":
-			{
-				var clientController = new ClientController(getBank());
-				clientController.Handle();
-				break;
-			}
+    /**
+     * Gets bank.
+     *
+     * @return the bank
+     */
+    public Bank getBank() {
+        return bank;
+    }
 
-			case "addBankAccount":
-			{
-				var accountController = new BankAccountController(getBank());
-				accountController.Handle();
-				break;
-			}
+    public ChainLink getNextChainLink() {
+        return nextChainLink;
+    }
 
-			case "makeTransaction":
-			{
-				System.out.println("Requests: transfer, withdraw, deposit");
+    public void setNextChainLink(ChainLink value) {
+        nextChainLink = value;
+    }
 
-				String requests = new Scanner(System.in).nextLine();
-				switch (requests)
-				{
-					case "transfer":
-					{
-						var selectedFrom = new ChooseAccountController(getBank());
-						selectedFrom.Handle();
+    public void handle() {
+        System.out.println("Requests: client, addBankAccount, makeTransaction");
+        String command = new Scanner(System.in).nextLine();
+        switch (command) {
+            case "client": {
+                var clientController = new ClientController(getBank());
+                clientController.handle();
+                break;
+            }
 
-						var selectedTo = new ChooseAccountController(getBank());
-						selectedTo.Handle();
+            case "addBankAccount": {
+                var accountController = new BankAccountController(getBank());
+                accountController.handle();
+                break;
+            }
 
-						IBankAccount accountFrom = Objects.requireNonNull(selectedFrom.getBankAccount(), "Bank account cannot be null");
-						IBankAccount accountTo = Objects.requireNonNull(selectedTo.getBankAccount(), "Bank account cannot be null");
+            case "makeTransaction": {
+                System.out.println("Requests: transfer, withdraw, deposit");
 
-						var balanceController = new BalanceController();
-						balanceController.Handle();
+                String requests = new Scanner(System.in).nextLine();
+                switch (requests) {
+                    case "transfer": {
+                        var selectedFrom = new ChooseAccountController(getBank());
+                        selectedFrom.handle();
 
-						Money amount = Objects.requireNonNull(balanceController.getAmount(), "Amount cannot be null");
-						accountFrom.Transfer(accountTo, amount);
-						break;
-					}
+                        var selectedTo = new ChooseAccountController(getBank());
+                        selectedTo.handle();
 
-					case "withdraw":
-					{
-						var selectedAccount = new ChooseAccountController(getBank());
-						selectedAccount.Handle();
+                        BankAccount accountFrom = Objects.requireNonNull(selectedFrom.getBankAccount(), "Bank account cannot be null");
+                        BankAccount accountTo = Objects.requireNonNull(selectedTo.getBankAccount(), "Bank account cannot be null");
 
-						IBankAccount account = Objects.requireNonNull(selectedAccount.getBankAccount(), "Bank account cannot be null");
-						var moneyController = new BalanceController();
-						moneyController.Handle();
+                        var balanceController = new BalanceController();
+                        balanceController.handle();
 
-						Money amount = Objects.requireNonNull(moneyController.getAmount(), "Amount cannot be null");
-						account.WithDraw(amount);
-						break;
-					}
+                        Money amount = Objects.requireNonNull(balanceController.getAmount(), "Amount cannot be null");
+                        accountFrom.transfer(accountTo, amount);
+                        break;
+                    }
 
-					case "deposit":
-					{
-						var selectedAccount = new ChooseAccountController(getBank());
-						selectedAccount.Handle();
+                    case "withdraw": {
+                        var selectedAccount = new ChooseAccountController(getBank());
+                        selectedAccount.handle();
 
-						IBankAccount account = Objects.requireNonNull(selectedAccount.getBankAccount(), "Bank account cannot be null");
-						var moneyController = new BalanceController();
-						moneyController.Handle();
+                        BankAccount account = Objects.requireNonNull(selectedAccount.getBankAccount(), "Bank account cannot be null");
+                        var moneyController = new BalanceController();
+                        moneyController.handle();
 
-						Money amount = Objects.requireNonNull(moneyController.getAmount(), "Amount cannot be null");
-						account.Deposit(amount);
-						break;
-					}
-				}
+                        Money amount = Objects.requireNonNull(moneyController.getAmount(), "Amount cannot be null");
+                        account.withDraw(amount);
+                        break;
+                    }
 
-				break;
-			}
-		}
+                    case "deposit": {
+                        var selectedAccount = new ChooseAccountController(getBank());
+                        selectedAccount.handle();
 
-		if (getNextChainLink() != null)
-		{
-			getNextChainLink().Handle();
-		}
-		else
-		{
-			Handle();
-		}
-	}
+                        BankAccount account = Objects.requireNonNull(selectedAccount.getBankAccount(), "Bank account cannot be null");
+                        var moneyController = new BalanceController();
+                        moneyController.handle();
+
+                        Money amount = Objects.requireNonNull(moneyController.getAmount(), "Amount cannot be null");
+                        account.deposit(amount);
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if (getNextChainLink() != null) {
+            getNextChainLink().handle();
+        } else {
+            handle();
+        }
+    }
 }

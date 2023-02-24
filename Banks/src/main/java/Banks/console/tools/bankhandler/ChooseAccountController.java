@@ -1,43 +1,62 @@
 package Banks.console.tools.bankhandler;
 
-import Banks.Entities.IBankAccount;
+import Banks.Entities.BankAccount;
 import Banks.Models.Bank;
-import Banks.console.chain.IChainLink;
-
+import Banks.console.chain.ChainLink;
 import java.util.Scanner;
 
-public class ChooseAccountController implements IChainLink
+/**
+ * The type Choose account controller.
+ */
+public class ChooseAccountController implements ChainLink
 {
+	private Bank bank;
+	private BankAccount bankAccount;
+	private ChainLink nextChainLink;
+
+	/**
+	 * Instantiates a new Choose account controller.
+	 *
+	 * @param bank the bank
+	 */
 	public ChooseAccountController(Bank bank)
 	{
 		this.bank = bank;
 	}
 
-	private Bank bank;
-	public final Bank getBank()
+	/**
+	 * Gets bank.
+	 *
+	 * @return the bank
+	 */
+	public Bank getBank()
 	{
 		return bank;
 	}
-	private IBankAccount bankAccount;
-	public final IBankAccount getBankAccount()
+
+	/**
+	 * Gets bank account.
+	 *
+	 * @return the bank account
+	 */
+	public BankAccount getBankAccount()
 	{
 		return bankAccount;
 	}
-	private void setBankAccount(IBankAccount value)
+	private void setBankAccount(BankAccount value)
 	{
 		bankAccount = value;
 	}
-	private IChainLink nextChainLink;
-	public final IChainLink getNextChainLink()
+	public ChainLink getNextChainLink()
 	{
 		return nextChainLink;
 	}
-	public final void setNextChainLink(IChainLink value)
+	public final void setNextChainLink(ChainLink value)
 	{
 		nextChainLink = value;
 	}
 
-	public final void Handle()
+	public void handle()
 	{
 		var accountList = getBank().GetAccountList();
 
@@ -54,16 +73,16 @@ public class ChooseAccountController implements IChainLink
 			return;
 		} catch (NumberFormatException e) {
 			System.out.println("Invalid input: " + selectedNumber + " is not a valid integer.");
-			Handle();
+			handle();
 		}
 
 		if (getNextChainLink() != null)
 		{
-			getNextChainLink().Handle();
+			getNextChainLink().handle();
 		}
 		else
 		{
-			Handle();
+			handle();
 		}
 	}
 }

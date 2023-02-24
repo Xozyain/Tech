@@ -1,78 +1,125 @@
 package Banks.Models;
 
-import Banks.Entities.ISubscriber;
+import Banks.Entities.Subscriber;
 import Banks.Exceptions.ClientException;
 
 import java.util.ArrayList;
 
-public class Client implements ISubscriber
-{
-	private final ArrayList<String> _messages = new ArrayList<String>();
-	ClientName clientName;
-	PassportNumber passportNumber;
-	String address;
-	private Client(ClientName clientName, PassportNumber passportNumber, String address)
-	{
-		this.clientName = clientName;
-		this.passportNumber = passportNumber;
-		this.address = address;
-	}
+/**
+ * The type Client.
+ */
+public class Client implements Subscriber {
+    private final ArrayList<String> messages = new ArrayList<String>();
+    /**
+     * The Client name.
+     */
+    ClientName clientName;
+    /**
+     * The Passport number.
+     */
+    PassportNumber passportNumber;
+    /**
+     * The Address.
+     */
+    String address;
 
-	public final String getAddress()
-	{
-		return address;
-	}
-	public final ClientName getClientName()
-	{
-		return clientName;
-	}
-	public final PassportNumber getPassport() { return passportNumber; }
+    private Client(ClientName clientName, PassportNumber passportNumber, String address) {
+        this.clientName = clientName;
+        this.passportNumber = passportNumber;
+        this.address = address;
+    }
 
-	public final boolean getVerified()
-	{
-		if (getAddress() == null || getPassport() == null)
-		{
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Gets address.
+     *
+     * @return the address
+     */
+    public final String getAddress() {
+        return address;
+    }
 
-	public final void ReceiveNotice(String message)
-	{
-		_messages.add(message);
-	}
+    /**
+     * Gets client name.
+     *
+     * @return the client name
+     */
+    public final ClientName getClientName() {
+        return clientName;
+    }
 
-	public static class ClientBuilder
-	{
-		private ClientName _clientName = null;
-		private String _address;
-		private PassportNumber _passport = null;
+    /**
+     * Gets passport.
+     *
+     * @return the passport
+     */
+    public final PassportNumber getPassport() {
+        return passportNumber;
+    }
 
-		public final ClientBuilder SetName(ClientName clientName)
-		{
-			_clientName = clientName;
-			return this;
-		}
+    /**
+     * Gets verified.
+     *
+     * @return the verified
+     */
+    public final boolean getVerified() {
+        return getAddress() != null && getPassport() != null;
+    }
 
-		public final ClientBuilder SetAddress(String address)
-		{
-			_address = address;
-			return this;
-		}
+    public final void receiveNotice(String message) {
+        messages.add(message);
+    }
 
-		public final ClientBuilder SetPassport(PassportNumber passport)
-		{
-			_passport = passport;
-			return this;
-		}
+    /**
+     * The type Client builder.
+     */
+    public static class ClientBuilder {
+        private ClientName clientName = null;
+        private String address;
+        private PassportNumber passport = null;
 
-		public final Client GetClient()
-		{
-			if (_clientName == null)
-			{
-				throw ClientException.BuildWithoutName();
-			}
-			return new Client(_clientName, _passport, _address);
-		}
-	}
+        /**
+         * Set name client builder.
+         *
+         * @param clientName the client name
+         * @return the client builder
+         */
+        public final ClientBuilder setName(ClientName clientName) {
+            this.clientName = clientName;
+            return this;
+        }
+
+        /**
+         * Set address client builder.
+         *
+         * @param address the address
+         * @return the client builder
+         */
+        public final ClientBuilder setAddress(String address) {
+            this.address = address;
+            return this;
+        }
+
+        /**
+         * Set passport client builder.
+         *
+         * @param passport the passport
+         * @return the client builder
+         */
+        public final ClientBuilder SetPassport(PassportNumber passport) {
+            this.passport = passport;
+            return this;
+        }
+
+        /**
+         * Get client client.
+         *
+         * @return the client
+         */
+        public final Client getClient() {
+            if (clientName == null) {
+                throw ClientException.BuildWithoutName();
+            }
+            return new Client(clientName, passport, address);
+        }
+    }
 }

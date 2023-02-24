@@ -7,152 +7,173 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CreditAccount implements IBankAccount
-{
-	private final AccountType accountType;
-	private Money verifiedLimit;
-	private UUID id;
-	private Balance balance;
-	private Client client;
-	private boolean verified;
-	private Money commission;
-	private Money creditLimit;
-	private int dayCounter;
-	private ArrayList<Transaction> transactionHistory;
-	public CreditAccount(UUID id, Client client, Money commission, Money creditLimit, Money verifiedLimit)
-	{
-		setDayCounter(0);
-		balance = new Balance();
-		transactionHistory = new ArrayList<Transaction>();
-		this.commission = commission;
-		this.creditLimit = creditLimit;
-		this.id = id;
-		this.client = client;
-		this.dayCounter = 0;
-		verified = client.getVerified();
-		this.verifiedLimit = verifiedLimit;
-		accountType = AccountType.Credit;
-	}
+/**
+ * The type Credit account.
+ */
+public class CreditAccount implements BankAccount {
+    private AccountType accountType;
+    private Money verifiedLimit;
+    private UUID id;
+    private Balance balance;
+    private Client client;
+    private boolean verified;
+    private Money commission;
+    private Money creditLimit;
+    private int dayCounter;
+    private ArrayList<Transaction> transactionHistory;
+
+    /**
+     * Instantiates a new Credit account.
+     *
+     * @param id            the id
+     * @param client        the client
+     * @param commission    the commission
+     * @param creditLimit   the credit limit
+     * @param verifiedLimit the verified limit
+     */
+    public CreditAccount(UUID id, Client client, Money commission, Money creditLimit, Money verifiedLimit) {
+        setDayCounter(0);
+        balance = new Balance();
+        transactionHistory = new ArrayList<Transaction>();
+        this.commission = commission;
+        this.creditLimit = creditLimit;
+        this.id = id;
+        this.client = client;
+        this.dayCounter = 0;
+        verified = client.getVerified();
+        this.verifiedLimit = verifiedLimit;
+        accountType = AccountType.Credit;
+    }
 
 
-	public final AccountType getAccountType()
-	{
-		return accountType;
-	}
-	public final Money getVerifiedLimit()
-	{
-		return verifiedLimit;
-	}
-	public final UUID getId()
-	{
-		return id;
-	}
-	public final void setId(UUID value)
-	{
-		id = value;
-	}
-	public final Balance getBalance()
-	{
-		return balance;
-	}
+    public AccountType getAccountType() {
+        return accountType;
+    }
 
-	public final Client getClient()
-	{
-		return client;
-	}
+    /**
+     * Gets verified limit.
+     *
+     * @return the verified limit
+     */
+    public Money getVerifiedLimit() {
+        return verifiedLimit;
+    }
 
-	public final void setClient(Client value)
-	{
-		client = value;
-	}
-	public final boolean getVerified()
-	{
-		return verified;
-	}
-	public final Money getCommission()
-	{
-		return commission;
-	}
-	public final Money getCreditLimit()
-	{
-		return creditLimit;
-	}
-	private int getDayCounter()
-	{
-		return dayCounter;
-	}
-	private void setDayCounter(int value)
-	{
-		dayCounter = value;
-	}
-	private ArrayList<Transaction> getTransactionHistory()
-	{
-		return transactionHistory;
-	}
+    public UUID getId() {
+        return id;
+    }
 
-	public final Transaction FindTransaction(UUID transactionId)
-	{
-		return getTransactionHistory().stream()
-				.filter(x -> transactionId.equals(x.getId()))
-				.findFirst().orElse(null);
-	}
+    /**
+     * Sets id.
+     *
+     * @param value the value
+     */
+    public void setId(UUID value) {
+        id = value;
+    }
 
-	public final void Transfer(IBankAccount toAccount, Money amount)
-	{
-		if (!getVerified() && (amount.amount().compareTo(getVerifiedLimit().amount()) < 0))
-		{
-			throw CreditAccountException.MaxedOutCreditLimit();
-		}
-		if (getBalance().WithDraw(amount).getAmount().compareTo(new BigDecimal(0)) < 0)
-		{
-			getBalance().Deposit(amount);
-			throw CreditAccountException.CreditLimitExceeded();
-		}
+    public Balance getBalance() {
+        return balance;
+    }
 
-		getBalance().WithDraw(amount);
-		toAccount.Deposit(amount);
-		getTransactionHistory().add(new Transaction(UUID.randomUUID(), getId(), toAccount.getId(), amount));
-		toAccount.GetTransfer(getId(), amount);
-	}
+    public Client getClient() {
+        return client;
+    }
 
-	public final void GetTransfer(UUID fromAccountId, Money amount)
-	{
-		getTransactionHistory().add(new Transaction(UUID.randomUUID(), fromAccountId, getId(), amount));
-	}
+    /**
+     * Sets client.
+     *
+     * @param value the value
+     */
+    public void setClient(Client value) {
+        client = value;
+    }
 
-	public final void WithDraw(Money amount)
-	{
-		if (!getVerified() && (amount.amount().compareTo(getVerifiedLimit().amount()) > 0))
-		{
-			throw CreditAccountException.CreditLimitExceeded();
-		}
-		getBalance().WithDraw(amount);
-	}
+    public boolean getVerified() {
+        return verified;
+    }
 
-	public final void Deposit(Money amount)
-	{
-		getBalance().Deposit(amount);
-	}
+    /**
+     * Gets commission.
+     *
+     * @return the commission
+     */
+    public Money getCommission() {
+        return commission;
+    }
 
-	public final void BalanceUpdate()
-	{
-		setDayCounter(getDayCounter() + 1);
-		if (getDayCounter() % 30 == 0)
-		{
-			getBalance().WithDraw(getCommission());
-		}
-	}
+    /**
+     * Gets credit limit.
+     *
+     * @return the credit limit
+     */
+    public Money getCreditLimit() {
+        return creditLimit;
+    }
 
-	public final void CancelTransaction(UUID transactionId)
-	{
-		Transaction transaction = transactionHistory.stream()
-				.filter(x -> x.getId().equals(transactionId))
-				.findFirst()
-				.orElse(null);
-		if (transaction == null)
-		{
-			throw CreditAccountException.CanNotFindTransaction();
-		}
-		getTransactionHistory().remove(transaction);
-	}
+    private int getDayCounter() {
+        return dayCounter;
+    }
+
+    private void setDayCounter(int value) {
+        dayCounter = value;
+    }
+
+    private ArrayList<Transaction> getTransactionHistory() {
+        return transactionHistory;
+    }
+
+    public Transaction findTransaction(UUID transactionId) {
+        return getTransactionHistory().stream()
+                .filter(x -> transactionId.equals(x.id()))
+                .findFirst().orElse(null);
+    }
+
+    public void transfer(BankAccount toAccount, Money amount) {
+        if (!getVerified() && (amount.amount().compareTo(getVerifiedLimit().amount()) < 0)) {
+            throw CreditAccountException.MaxedOutCreditLimit();
+        }
+        if (getBalance().withdraw(amount).getAmount().compareTo(new BigDecimal(0)) < 0) {
+            getBalance().deposit(amount);
+            throw CreditAccountException.CreditLimitExceeded();
+        }
+
+        getBalance().withdraw(amount);
+        toAccount.deposit(amount);
+        getTransactionHistory().add(new Transaction(UUID.randomUUID(), getId(), toAccount.getId(), amount));
+        toAccount.getTransfer(getId(), amount);
+    }
+
+    public void getTransfer(UUID fromAccountId, Money amount) {
+        getTransactionHistory().add(new Transaction(UUID.randomUUID(), fromAccountId, getId(), amount));
+    }
+
+    public void withDraw(Money amount) {
+        if (!getVerified() && (amount.amount().compareTo(getVerifiedLimit().amount()) > 0)) {
+            throw CreditAccountException.CreditLimitExceeded();
+        }
+        getBalance().withdraw(amount);
+    }
+
+    public void deposit(Money amount) {
+        getBalance().deposit(amount);
+    }
+
+    public void balanceUpdate() {
+        setDayCounter(getDayCounter() + 1);
+        if (getDayCounter() % 30 == 0) {
+            getBalance().withdraw(getCommission());
+        }
+    }
+
+    public void cancelTransaction(UUID transactionId) {
+        Transaction transaction = transactionHistory.stream()
+                .filter(x -> x.id().equals(transactionId))
+                .findFirst()
+                .orElse(null);
+        if (transaction == null) {
+            throw CreditAccountException.CanNotFindTransaction();
+        }
+        getTransactionHistory().remove(transaction);
+    }
 }

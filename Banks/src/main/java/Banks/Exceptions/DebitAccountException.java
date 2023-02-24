@@ -1,19 +1,28 @@
 package Banks.Exceptions;
 
-public class DebitAccountException extends BaseException
-{
-	private DebitAccountException(String message)
-	{
-		super(message);
-	}
+/**
+ * The type Debit account exception.
+ */
+public class DebitAccountException extends BaseException {
+    private DebitAccountException(String message) {
+        super(message);
+    }
 
-	public static DebitAccountException MaxedOutCreditLimit()
-	{
-		return new DebitAccountException("Maxed out credit limit");
-	}
+    /**
+     * Maxed out credit limit debit account exception.
+     *
+     * @return the debit account exception
+     */
+    public static DebitAccountException MaxedOutCreditLimit() {
+        return new DebitAccountException("Maxed out credit limit");
+    }
 
-	public static DebitAccountException CanNotFindTransaction()
-	{
-		return new DebitAccountException("Can not find transaction");
-	}
+    /**
+     * Can not find transaction debit account exception.
+     *
+     * @return the debit account exception
+     */
+    public static DebitAccountException CanNotFindTransaction() {
+        return new DebitAccountException("Can not find transaction");
+    }
 }

@@ -2,4 +2,8 @@ package Banks.Models;
 
 import java.math.BigDecimal;
 
-public record Money (BigDecimal amount) {}
+/**
+ * The type Money.
+ */
+public record Money(BigDecimal amount) {
+}

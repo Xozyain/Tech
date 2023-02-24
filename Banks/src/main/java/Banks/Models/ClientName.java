@@ -1,3 +1,7 @@
 package Banks.Models;
 
-public record ClientName (String name) {}
+/**
+ * The type Client name.
+ */
+public record ClientName(String name) {
+}

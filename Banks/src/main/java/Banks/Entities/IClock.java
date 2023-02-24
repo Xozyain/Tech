@@ -2,7 +2,14 @@ package Banks.Entities;
 
 import java.time.LocalDateTime;
 
-public interface IClock
-{
-	LocalDateTime GetNowTime();
+/**
+ * The interface Clock.
+ */
+public interface IClock {
+    /**
+     * Gets now time.
+     *
+     * @return the now time
+     */
+    LocalDateTime getNowTime();
 }

@@ -1,3 +1,7 @@
 package Banks.Models;
 
-public record PassportNumber(String passportNumber) {}
+/**
+ * The type Passport number.
+ */
+public record PassportNumber(String passportNumber) {
+}

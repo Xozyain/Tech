@@ -1,31 +1,40 @@
 package Banks.Models;
 
-public enum AccountType
-{
-	/** 
-	 deposit account
-	*/
-	Deposit,
+/**
+ * The enum Account type.
+ */
+public enum AccountType {
+    /**
+     * deposit account
+     */
+    Deposit,
 
-	/** 
-	 debit account
-	*/
-	Debit,
+    /**
+     * debit account
+     */
+    Debit,
 
-	/** 
-	 credit account
-	*/
-	Credit;
+    /**
+     * credit account
+     */
+    Credit;
 
-	public static final int SIZE = Integer.SIZE;
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    public int getValue() {
+        return this.ordinal();
+    }
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
-
-	public static AccountType forValue(int value)
-	{
-		return values()[value];
-	}
+    /**
+     * For value account type.
+     *
+     * @param value the value
+     * @return the account type
+     */
+    public static AccountType forValue(int value) {
+        return values()[value];
+    }
 }

@@ -1,14 +1,19 @@
 package Banks.Exceptions;
 
-public class BalanceException extends BaseException
-{
-	private BalanceException(String message)
-	{
-		super(message);
-	}
+/**
+ * The type Balance exception.
+ */
+public class BalanceException extends BaseException {
+    private BalanceException(String message) {
+        super(message);
+    }
 
-	public static BalanceException NotEnoughMoney()
-	{
-		return new BalanceException("Not enough money on balance");
-	}
+    /**
+     * Not enough money balance exception.
+     *
+     * @return the balance exception
+     */
+    public static BalanceException NotEnoughMoney() {
+        return new BalanceException("Not enough money on balance");
+    }
 }
