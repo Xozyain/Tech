@@ -4,6 +4,10 @@ out/
 !**/src/test/**/out/
 .idea
 
+### Gradle ###
+.gradle/
+**/build/
+
 ### Eclipse ###
 .apt_generated
 .classpath
