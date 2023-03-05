@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"Banks.Console"},{"l":"Banks.console.chain"},{"l":"Banks.console.tools.bankhandler"},{"l":"Banks.console.tools.clienthandlers"},{"l":"Banks.Entities"},{"l":"Banks.Exceptions"},{"l":"Banks.Models"},{"l":"Banks.Services"},{"l":"org.example"}];updateSearchResults();
