@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("io.freefair.lombok") version "6.6.3"
 }
 
 group = "org.example"
@@ -8,10 +7,6 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-}
-
-subprojects {
-    apply(plugin = "io.freefair.lombok")
 }
 
 dependencies {
