@@ -6,14 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 public class CatService {
     private CatDao catDao;
+    private OwnerDao ownerDao;
     private OwnerService ownerService = new OwnerService();
 
-    public CatService(CatDao catDao) {
+    public CatService(CatDao catDao, OwnerDao ownerDao) {
         this.catDao = catDao;
+        this.ownerDao = ownerDao;
     }
 
     public Long saveCat(CatDto cat) {
-        Owner owner = ownerService.findOwner(cat.getOwnerId());
+        // Owner owner = ownerService.findOwner(cat.getOwnerId());
+        Owner owner = ownerDao.findOwner(cat.getOwnerId());
         Cat catModel = new Cat(cat.getId(), cat.getName(), cat.getDateOfBirth(), cat.getBreed(), cat.getColor(), owner, new ArrayList<>());
         return catDao.save(catModel);
     }

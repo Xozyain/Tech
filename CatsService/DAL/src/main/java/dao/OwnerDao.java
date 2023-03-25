@@ -39,8 +39,6 @@ public class OwnerDao {
         return HibernateSession.getSessionFactory().openSession().get(Owner.class, id);
     }
 
-
-    // Переделать
     public List<Owner> findAll() {
         List<Owner> Owners = (List<Owner>)  HibernateSession.getSessionFactory().openSession().createQuery("From Owner").list();
         return Owners;
